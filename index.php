@@ -106,6 +106,7 @@ if(isset($_POST['login'])){
 <head>
     <meta charset="UTF-8">
     <title>ASTRA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
     <meta name="description" content="The small framework with powerful features">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="astra_system/public/img/logo1.png">
@@ -116,21 +117,16 @@ if(isset($_POST['login'])){
 <style>
     body{
         overflow: hidden;
-    }
-
-    #particles-js{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100vh;
-    z-index: -100;
+        background-image: url("img/bg.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-color: #495057;
+        height: 100%;
     }
     .container{
         position: absolute;
-        top: 50%;
-        left: 50%;
+        top: 45%;
+        left: 30%;
         transform: translate(-50%, -50%);
         width: 400px;
         height: 400px;
@@ -138,15 +134,6 @@ if(isset($_POST['login'])){
         border-radius: 10px;
         padding: 5px;
         box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-    }
-    .form-image{
-        position: relative;
-        left: -5px;
-        top: -20px;
-        width: 150px;
-        height: 150px;
-        margin: 0 auto;
-        opacity: 0;
     }
     .form-label{
         font-weight: bold;
@@ -156,9 +143,9 @@ if(isset($_POST['login'])){
     }
     h1{
         position: relative;
-        top: -50px;
-        font-weight: 800;
-        color: #141E46;
+        top: 10px;
+        font-weight: 700;
+        color: #fff;
     }
     .form-group{
         position: relative;
@@ -169,7 +156,7 @@ if(isset($_POST['login'])){
         top: 20px;
         text-align: center;
         font-size: 14px;
-        color: #141E46;
+        color: #1864ab;
         font-weight: 500;
         text-decoration: none;
         transition: all 500ms ease;
@@ -211,6 +198,21 @@ if(isset($_POST['login'])){
     width: 100%;
     height: 100vh;
     }
+    .title{
+        font-family: "Poppins";
+        color: #1971c2;
+        font-size: 24px;
+        font-weight: 600;
+    }
+    footer{
+        position: absolute;
+        top: 90%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        font-size: 14px;
+        text-align: center
+    }
 </style>
 <body>
     <div id="particles-js"></div>
@@ -218,9 +220,9 @@ if(isset($_POST['login'])){
     <div class="container">
         <div class="form-container">
             <center>
-            <img class="form-image" src="img/logo1.png" alt="">
+            <h2 class="title mt-4">Michelle Silver Lining Mental Health Counseling</h2><br>
 <!--             <h1>.Gems</h1> -->
-            <form action="index.php" class="form-group" method="post">
+            <form action="index.php" class="form-group mt-5" method="post">
                 <label class="form-label w-75 text-start" for="employeeID">Employee No.</label>
                 <input class="form-control w-75" type="text" id="username" name="employeeID" required>
                 <label class="form-label w-75 text-start" for="password">Password:</label>
@@ -232,8 +234,32 @@ if(isset($_POST['login'])){
             </center>
         </div>
     </div>
+    <footer>
+        <fieldset class="text-light footer">
+            <legend align="center">
+                <h1>Highly Confidential</h1>
+            </legend>
+            <p>This website facility is for the use of authorized users only. All users of this website are subject to having all of their activities monitored and recorded. Any nefarious activity will be subject to legal action. Anyone using this system expressly consents to such monitoring and is advised that if such monitoring reveals possible evidence of criminal activity system personnel may provide the evidence of such monitoring to law enforcement officials.</p>
+        </fieldset>
+    </footer>
+
     <script src="particle/particles.js"></script>
     <script src="particle/demo/js/app.js"></script>
 </body>
+<script>
+    // Disable zooming using Ctrl + Scroll
+    document.addEventListener('wheel', function(e) {
+        if (e.ctrlKey) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    // Disable zooming using Ctrl + '+' and Ctrl + '-'
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0')) {
+            e.preventDefault();
+        }
+    });
+</script>
 </html>
  

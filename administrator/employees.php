@@ -296,36 +296,37 @@ if(isset($_SESSION['user_data'])) {
                                         while ($row = mysqli_fetch_array($result)) {
                                             echo '<tbody>';
                                             echo "<tr>";
-                                            echo "<td class='text-center'><img style='width: 40px; height: 40px; border-radius: 50%;' src='".$row['avatar']."' alt=''></td>";
-                                            echo "<td class='text-center'>".$row['emp_no']."</td>";
-                                            echo "<td class='text-center'>".$row['name']."</td>";
-                                            echo "<td class='text-center'>".$row['email']."</td>";
-                                            echo "<td class='text-center'>".$row['position']."</td>";
-                                            echo "<td class='text-center'>".$row['rate']."$</td>";
-                                            echo "<td class='text-center'>".$row['shift']."</td>";
+                                            echo "<td class='text-center'><img style='width: 40px; height: 40px; border-radius: 50%;' src='" . $row['avatar'] . "' alt=''></td>";
+                                            echo "<td class='text-center'>" . $row['emp_no'] . "</td>";
+                                            echo "<td class='text-center'>" . $row['name'] . "</td>";
+                                            echo "<td class='text-center'>" . $row['email'] . "</td>";
+                                            echo "<td class='text-center'>" . $row['position'] . "</td>";
+                                            echo "<td class='text-center'>" . $row['rate'] . "$</td>";
+                                            echo "<td class='text-center'>" . $row['shift'] . "</td>";
                                             echo "<td class='text-center'>";
-                                                if ($row['status'] == 0){
+                                            if ($row['status'] == 0) {
                                                 echo '<p class="text-danger"><i class="fa-solid fa-hand"></i><b></b></p>';
-                                                } else {
+                                            } else {
                                                 echo '<p class="text-success"><i class="fa-solid fa-circle-check"></i><b></b></p>';
-                                                }
+                                            }
                                             echo "</td>";
-                                            
+                                        
+                                            // Add dropdown in actions
                                             echo "<td class='text-center'>";
-                                                echo '<div class="dropdown">';
-                                                    echo '<button class="btn dropdown-toggle" type="button" data-toggle="dropdown"></button>';
-                                                    echo'
-                                                    <ul class="dropdown-menu row">';
-                                                    if ($row['status'] == 0){
-                                                        echo '<li class="col mb-1"><a method="GET" href="administrator.php?id=' . $row['id'] . '" class="btn btn-outline-success col" title="Delete Record"><i class="fa-solid fa-check"></i><b> VERIFY</b></a></li>';
-                                                    } else {
-                                                        echo '<li class="col mb-1"><a method="GET" href="administrator.php?id=' . $row['id'] . '" class="btn btn-outline-danger col" title="Delete Record"><i class="fa-solid fa-hand"></i><b> HOLD</b></a></li>';
-                                                    }
-                                                    echo' </ul>';
-                                                echo '</div>';
+                                            echo '<div class="dropdown">';
+                                            echo '  <button class="btn btn-secondary dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false"></button>';
+                                            echo '  <ul class="dropdown-menu text-center" aria-labelledby="actionDropdown">';
+                                            echo '    <li><a class="dropdown-item text-dark" href="hold.php?id=' . $row['emp_no'] . '">Hold</a></li>';
+                                            echo '    <li><a class="dropdown-item text-success" href="verify.php?id=' . $row['emp_no'] . '">Verify</a></li>';
+                                            echo '    <li><a class="dropdown-item text-primary" href="edit.php?id=' . $row['emp_no'] . '">Edit</a></li>';
+                                            echo '    <li><a class="dropdown-item text-danger" href="delete.php?id=' . $row['emp_no'] . '" onclick="return confirm(\'Are you sure you want to delete this employee?\')">Delete</a></li>';
+                                            echo '  </ul>';
+                                            echo '</div>';
                                             echo "</td>";
+                                        
                                             echo "</tr>";
                                         }
+                                        
                                         echo "</tbody>";
                                         echo "</table>";
 
@@ -424,4 +425,7 @@ function searchFunction() {
 const debounceSearch = debounce(searchFunction, 1000);
     </script>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
 </html>
