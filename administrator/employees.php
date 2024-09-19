@@ -8,424 +8,212 @@ if(isset($_SESSION['user_data'])) {
     $user_id = $user_data['emp_no'];
     $user_name = $user_data['name'];
     $user_email = $user_data['email'];
-    $user_status = $user_data['status'];
     $avatar = $user_data['avatar'];
-
-} else {
+  } else {
     header("Location: ../");
-}
-
+  }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>AMAPS - Employees</title>
-    <meta name="description" content="The small framework with powerful features">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" href="/favicon.ico">
-    <?php include '../links.php' ?>
+    <meta charset="utf-8">
+    <title>DASHMIN - Bootstrap Admin Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="../css/style.css" rel="stylesheet">
 </head>
-<style>
-        body{
-            background-color: #F1f1f1;
-            color: #141E46;
-            font-family: 'Poppins', sans-serif;
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 1.7;
-            letter-spacing: 0.025em;
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overflow: hidden;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            z-index: 100;
-            width: 210px; /* Sidebar width */
-            padding: 50px 0 0; /* Adjust padding based on your needs */
-            background-color: #141E46; /* Sidebar background color */
-            transition: all 0.5s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            color: #f1f1f1;
-        }
-        .sidebar.collapsed {
-            width: 80px; /* Collapsed sidebar width */
-            overflow-x: hidden;
-            transition: all 0.5s ease;
-        }
-        .list-group-item i {
-            position: relative;
-            margin-right: 10px; /* Space between icon and text */
-        }
-        .list-group-item .text {
-            transition: all 0.5s ease;
-        }
-        .list-group-item.collapsed .text {
-            display: none;
-            transition: all 0.5s ease;
-        }
-        .main-content {
-            margin-left: 200px; /* Adjust according to sidebar width */
-            padding: 20px; /* Adjust padding based on your needs */
-            transition: all 0.5s ease;
-            overflow: hidden;
-        }
-        .main-content.collapsed {
-            margin-left: 80px; /* Adjust margin for collapsed sidebar */
-        }
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            transition: all 0.5s ease;
-        }
-        .sidebar-header.collapsed {
-            text-align: center;
-            padding: 15px 0;
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .sidebar-header.collapsed p {
-            display: none;
-            transition: all 0.5s ease;
-        }
-        .avatar.collapsed {
-            transform: scale(0.5);
 
-        }
-        .toggle-btn {
-            margin-right: 10px;
-            background-color: #141E46;
-        }
-        .toggle-btn:hover {
-            background-color: #141E46;
-            color: #FF6969;
-        }
-        .list-group{
-            position: absolute;
-            top: 55%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-        }
-        .list-group-item {
-            position: relative;
-            padding: 10px 24px;
-            border: none;
-            background-color: #141E46;
-            color: #FFF5E0;
-        }
-        .list-group-item:hover {
-            color: #FF6969;
-            background-color: #141E46;
-        }
-        .activated{
-            color: #FF6969;
-        }
-        .navbar{
-            background-color: #f1f1f1;
-        }
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-
-        .pagination a {
-            padding: 10px 15px;
-            text-decoration: none;
-            color: #141E46;
-            border: 1px solid #141E46;
-            margin: 0 5px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .pagination a.active {
-            background-color: #141E46;
-            color: #fff;
-        }
-
-        .pagination .arrow {
-            padding: 10px;
-            border: 1px solid #141E46;
-            margin: 0 5px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .card{
-            height: fit-content;
-        }
-        .side-inner{
-        overflow: hidden;
-        }
-
-  </style>
 <body>
-<div class="container-fluid">
-        <div class="row">
-        <div class="col-auto sidebar" id="sidebar">
-                <div class="sidebar-header">
-                    <center>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>Silver Lining</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
                         <?php
                         if(isset($user_data['avatar'])){
-                            echo '<img src="'. $avatar .'" alt="User Avatar" class="avatar mb-2">';
+                            echo '<img class="rounded-circle" src="'.$avatar.'" alt="" style="width: 40px; height: 40px;">';
                         } else {
                             echo '<img src="../assets/temp_avatar.jpg" alt="User Avatar" class="avatar mb-2">';
                         }
                         ?>
                         
-                        <p><?php echo $user_id; ?></p>
-                    </center>
-                </div>
-                <div class="list-group">
-                    <a href="../administrator/index.php" class="d-flex align-items-center list-group-item list-group-item-action">
-                        &nbsp<i class="fa-solid fa-clock mr-3"></i><span class="text">Timekeeping</span>
-                    </a>
-                    <a href="../administrator/employees.php" class="d-flex align-items-center list-group-item list-group-item-action activated">
-                        &nbsp<i class="fa-solid fa-users mr-3"></i><span class="text">Employees</span>
-                    </a>
-                    <a href="../administrator/payroll.php" class="d-flex align-items-center list-group-item list-group-item-action">
-                        &nbsp<i class="fa-solid fa-money-check-dollar mr-3"></i><span class="text">Payroll</span>
-                    </a>
-                    <a href="../administrator/attendance.php" class="d-flex align-items-center list-group-item list-group-item-action">
-                        &nbsp<i class="fa-solid fa-user mr-3"></i><span class="text">Attendances</span>
-                    </a>
-                    <a href="../administrator/settings.php" class="d-flex align-items-center list-group-item list-group-item-action">
-                        &nbsp<i class="fa-solid fa-gear mr-3"></i><span class="text">Settings</span>
-                    </a><br><br><br>
-                    <a href="../administrator/functions/logout.php" class="d-flex align-items-center list-group-item list-group-item-action bg-danger">
-                        &nbsp<i class="fa-solid fa-power-off"></i><span class="text">Logout</span>
-                    </a>
-                </div>
-                
-            </div>
-
-            <!-- Main Content -->
-            <div class="col main-content" id="main-content">
-                <nav class="navbar">
-                    <div class="container-fluid header-bar">
-                        <button class="btn btn-secondary toggle-btn" id="sidebar-toggle">
-                            <i class="fas fa-bars"></i>
-                        </button>
-                        <h1 class="navbar-brand">Employee List</h1>
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
-                </nav>
-
-                <main>
-                    <center>
-                        <div class="container mb-3 mt-3">
-                        <form action="ratesfunctions/upload_rates.php" class="input-group" method="post" name="upload_excel" enctype="multipart/form-data" autocomplete="off">
-                      <a class="rbtn btn btn-secondary" data-bs-toggle="modal" data-bs-target="#info-modal" style="background-color: whitesmoke; border: 1px solid #141E46; color: gray;"><i class="fa-solid fa-circle-question"></i></a>
-                      <input type="file" id="file" name="file" accept=".csv" style="border: 1px solid #141E46;" class="form-control" required>
-                      <button class="rbtn btn btn-primary" type="submit" name="upload" value="upload" style="background-color: whitesmoke; border: 1px solid #141E46; color: #141E46;"><i class="fa fa-file-import"></i></button>
-                      <button class="rbtn btn btn-success text-success" type="button" data-bs-toggle="modal" data-bs-target="#updatemodal" style="background-color: whitesmoke; border: 1px solid #141E46; color: #4CA771;"><i class="fa fa-plus"></i></button>
-                      <button class="rbtn btn btn-danger" style="background-color: whitesmoke; border:1px solid #141E46; color: #C70039;" id="delete" name="delete" type="button" data-bs-toggle="modal" data-bs-target="#CommaSeparatedDelete" ><i class="fa fa-trash"></i></button>
-                      <button class="rbtn btn btn-danger" id="delete" name="delete" type="button" data-bs-toggle="modal" data-bs-target="#deleteAllModal" style="background-color: whitesmoke; border:1px solid #141E46; color: #C70039;"><i class="fa fa-trash"></i> Delete All</button>
-              </form>
-            </div>
-                    <div class="site-section">
-                        <div class="container fade-in-fwd">
-                            <div class="card">
-                                <div class="card-header" style="background-color: #141E46;">
-                                <span class="h5 text-light"><i class="fa-solid fa-table-list mr-3"></i> Employees</span>
-                                </div>
-                                <div class="card-body">
-                                <div class="row">
-                                <div class="form-group col-2">
-                                    <select class="form-select" name="state" id="maxRows" onchange="changeMaxRows()">
-                                        <option value="" selected disabled>No. of rows</option>
-                                        <option value="10">10</option>
-                                        <option value="20">20</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                        <option value="500">500</option>
-                                        <option value="1000">1000</option>
-                                        <option value="2000">2000</option>
-                                        <option value="5000">Show ALL Rows</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group col-2">
-                                <a href="./link3.php" class="btn btn-warning " style="width: 112px" ><i class="fa-solid fa-arrow-rotate-left"></i> Reset</a>
-                                </div>
-                                <div class="col"></div>
-                                <div class="form-group col-3">
-                                    <input type="text" id="myInput" onkeyup="debounceSearch()" placeholder="Search..." class="form-control">
-                                </div>
-                                <?php
-                                $page = isset($_GET['page']) ? $_GET['page'] : 1;
-                                $limit = isset($_GET['limit']) ? $_GET['limit'] : 10;
-                                $start = ($page - 1) * $limit;
-                                $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
-
-                                if (!empty($search)) {
-                                    $sql = "SELECT * FROM users WHERE emp_no LIKE '%$search%' ORDER BY emp_no ASC LIMIT $start, $limit";
-                                    $total_sql = "SELECT COUNT(*) FROM users WHERE emp_no LIKE '%$search%'";
-                                } else {
-                                    $sql = "SELECT * FROM users ORDER BY status ASC LIMIT $start, $limit";
-                                    $total_sql = "SELECT COUNT(*) FROM users";
-                                }
-                                
-                                if ($result = mysqli_query($conn, $sql)) {
-                                    if (mysqli_num_rows($result) > 0) {
-                                        echo '
-                                        <table class="table table-sm table-striped table-hover table-responsive wrap" style="width: 100%;" id="table-id">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">Avatar</th>
-                                                <th class="text-center">Employee ID</th>
-                                                <th class="text-center">Name</th>
-                                                <th class="text-center">E-mail</th>
-                                                <th class="text-center">Position</th>
-                                                
-                                                <th class="text-center">Rate per hour</th>
-                                                <th class="text-center">Shift</th>
-                                                <th class="text-center">Status</th>
-                                                <th class="text-center">Actions</th>
-                                            </tr>
-                                        </thead>';
-                                        while ($row = mysqli_fetch_array($result)) {
-                                            echo '<tbody>';
-                                            echo "<tr>";
-                                            echo "<td class='text-center'><img style='width: 40px; height: 40px; border-radius: 50%;' src='" . $row['avatar'] . "' alt=''></td>";
-                                            echo "<td class='text-center'>" . $row['emp_no'] . "</td>";
-                                            echo "<td class='text-center'>" . $row['name'] . "</td>";
-                                            echo "<td class='text-center'>" . $row['email'] . "</td>";
-                                            echo "<td class='text-center'>" . $row['position'] . "</td>";
-                                            echo "<td class='text-center'>" . $row['rate'] . "$</td>";
-                                            echo "<td class='text-center'>" . $row['shift'] . "</td>";
-                                            echo "<td class='text-center'>";
-                                            if ($row['status'] == 0) {
-                                                echo '<p class="text-danger"><i class="fa-solid fa-hand"></i><b></b></p>';
-                                            } else {
-                                                echo '<p class="text-success"><i class="fa-solid fa-circle-check"></i><b></b></p>';
-                                            }
-                                            echo "</td>";
-                                        
-                                            // Add dropdown in actions
-                                            echo "<td class='text-center'>";
-                                            echo '<div class="dropdown">';
-                                            echo '  <button class="btn btn-secondary dropdown-toggle" type="button" id="actionDropdown" data-bs-toggle="dropdown" aria-expanded="false"></button>';
-                                            echo '  <ul class="dropdown-menu text-center" aria-labelledby="actionDropdown">';
-                                            echo '    <li><a class="dropdown-item text-dark" href="hold.php?id=' . $row['emp_no'] . '">Hold</a></li>';
-                                            echo '    <li><a class="dropdown-item text-success" href="verify.php?id=' . $row['emp_no'] . '">Verify</a></li>';
-                                            echo '    <li><a class="dropdown-item text-primary" href="edit.php?id=' . $row['emp_no'] . '">Edit</a></li>';
-                                            echo '    <li><a class="dropdown-item text-danger" href="delete.php?id=' . $row['emp_no'] . '" onclick="return confirm(\'Are you sure you want to delete this employee?\')">Delete</a></li>';
-                                            echo '  </ul>';
-                                            echo '</div>';
-                                            echo "</td>";
-                                        
-                                            echo "</tr>";
-                                        }
-                                        
-                                        echo "</tbody>";
-                                        echo "</table>";
-
-                                        $result_total = mysqli_query($conn, $total_sql);
-                                        $total_records = mysqli_fetch_array($result_total)[0];
-                                        $total_pages = ceil($total_records / $limit);
-
-                                        echo '<div class="pagination">';
-                                        if ($page > 1) {
-                                            echo '<a href="?page=' . ($page - 1) . '&limit=' . $limit . '&search=' . $search . '" class="arrow">&#9665;</a>';
-                                        }
-                                        $startPage = max($page - 2, 1);
-                                        $endPage = min($startPage + 4, $total_pages);
-
-                                        for ($i = $startPage; $i <= $endPage; $i++) {
-                                            echo '<a href="?page=' . $i . '&limit=' . $limit . '&search=' . $search . '" class="' . ($page == $i ? 'active' : '') . '">' . $i . '</a>';
-                                        }
-                                        if ($page < $total_pages) {
-                                            echo '<a href="?page=' . ($page + 1) . '&limit=' . $limit . '&search=' . $search . '" class="arrow">&#9655;</a>';
-                                        }
-                                        echo '</div>';
-
-                                        mysqli_free_result($result);
-                                    }  else {
-                                        echo '<div class="alert alert-danger"><em>No records were found.</em></div>';
-                                    }
-                                    
-                                }  else {
-                                    echo '<div class="alert alert-danger"><em>No records were found.</em></div>';
-                                }
-                                ?>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>  
-                    </center>
-                </main>
-            </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0"><?php echo $user_name; ?></h6>
+                        <span><?php echo $user_id; ?></span>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="index.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Timekeeping</a>
+                    <a href="employees.php" class="nav-item nav-link active"><i class="fa fa-users me-2"></i>Employees</a>
+                    <a href="payroll.php" class="nav-item nav-link"><i class="fa fa-file-alt me-2"></i>Payroll</a>
+                    <a href="attendance.php" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Attendances</a>
+                    <a href="settings.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>My Profile</a>
+                </div>
+            </nav>
         </div>
+        <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <?php
+                        if(isset($user_data['avatar'])){
+                            echo '<img class="rounded-circle" src="'.$avatar.'" alt="" style="width: 40px; height: 40px;">';
+                        } else {
+                            echo '<img src="../assets/temp_avatar.jpg" alt="User Avatar" class="avatar mb-2">';
+                        }
+                        ?>
+                            <span class="d-none d-lg-inline-flex"><?php echo $user_name; ?></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="functions/logout.php" class="dropdown-item text-danger">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+            
+                    <div class="row mb-3 p-4">
+                        <div class="col-12">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Responsive Table</h6>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">First Name</th>
+                                            <th scope="col">Last Name</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Country</th>
+                                            <th scope="col">ZIP</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>John</td>
+                                            <td>Doe</td>
+                                            <td>jhon@email.com</td>
+                                            <td>USA</td>
+                                            <td>123</td>
+                                            <td>Member</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">2</th>
+                                            <td>Mark</td>
+                                            <td>Otto</td>
+                                            <td>mark@email.com</td>
+                                            <td>UK</td>
+                                            <td>456</td>
+                                            <td>Member</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+                                            <td>Jacob</td>
+                                            <td>Thornton</td>
+                                            <td>jacob@email.com</td>
+                                            <td>AU</td>
+                                            <td>789</td>
+                                            <td>Member</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                        </div>
+                    
+
+            <video id="cameraPreview" autoplay style="display: none;"></video>
+            <canvas id="photoCanvas" style="display: none;"></canvas>
+
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            <span>2024 </span>&copy; <a href="#">Michelle Silver Lining Mental Health Counseling</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
 
-    <script src="../template/js/jquery-3.3.1.min.js"></script>
-    <script src="../template/js/popper.min.js"></script>
-    <script src="../template/js/bootstrap.min.js"></script>
-    <script src="../template/js/main.js"></script>
-    <script>
-      new DataTable('#table-id', {
-         deferRender: true,
-         processing: true,
-         ordering: true,
-         scroller: true,
-         scrollY: 200,
-         searching: false,
-         paging: false,
-         reponsive: true
-      });
-   </script>
-    <script>
-        document.getElementById('sidebar-toggle').addEventListener('click', function() {
-        document.getElementById('sidebar').classList.toggle('collapsed');
-        document.getElementById('main-content').classList.toggle('collapsed');
-        document.querySelector('.avatar').classList.toggle('collapsed');
-        document.querySelector('.sidebar-header').classList.toggle('collapsed');
-        
-        // Toggle visibility of text in list items
-        var listItems = document.querySelectorAll('.list-group-item');
-        listItems.forEach(function(item) {
-            item.classList.toggle('collapsed');
-        });
-    });
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../lib/chart/chart.min.js"></script>
+    <script src="../lib/easing/easing.min.js"></script>
+    <script src="../lib/waypoints/waypoints.min.js"></script>
+    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="../lib/tempusdominus/js/moment.min.js"></script>
+    <script src="../lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-    function changeMaxRows() {
-  var maxRowsSelect = document.getElementById("maxRows");
-  var maxRows = maxRowsSelect.value;
-
-  maxRowsSelect.options[maxRowsSelect.selectedIndex].text =
-    "Show " + maxRows + " Rows";
-
-  event.preventDefault();
-
-  window.location.href = window.location.pathname + "?page=1&limit=" + maxRows;
-}
-
-function debounce(func, wait) {
-  let timeout;
-  return function(...args) {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), wait);
-  };
-}
-
-function searchFunction() {
-  var input = document.getElementById("myInput").value;
-  window.location.href = "link3.php?search=" + input;
-}
-const debounceSearch = debounce(searchFunction, 1000);
-    </script>
+    <!-- Template Javascript -->
+    <script src="../js/main.js"></script>
+    
 </body>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
 </html>

@@ -8,422 +8,256 @@ if(isset($_SESSION['user_data'])) {
     $user_id = $user_data['emp_no'];
     $user_name = $user_data['name'];
     $user_email = $user_data['email'];
-    $user_status = $user_data['status'];
     $avatar = $user_data['avatar'];
-} else {
+  } else {
     header("Location: ../");
-}
-
-if(isset($_POST['save_profile'])) {
-    $emp_no = $_POST['emp_no'];
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $old_password = $_POST['old_password'];
-    $new_password = $_POST['new_password'];
-    $confirm_password = $_POST['confirm_password'];
-    
-    // Update user data in database
-    $update_sql = "UPDATE users SET name='$name', email='$email' WHERE emp_no='$user_id'";
-    mysqli_query($conn, $update_sql);
-    
-    // Handle password change if provided
-    if(!empty($new_password) && ($new_password == $confirm_password)) {
-        // Verify old password
-        $verify_password_sql = "SELECT password FROM users WHERE emp_no='$user_id'";
-        $result = mysqli_query($conn, $verify_password_sql);
-        if($result && mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_assoc($result);
-            $hashed_password = $row['password'];
-            if(password_verify($old_password, $hashed_password)) {
-
-                $hashed_password_new = password_hash($new_password, PASSWORD_DEFAULT);
-                $update_password_sql = "UPDATE users SET password='$hashed_password_new' WHERE emp_no='$user_id'";
-                mysqli_query($conn, $update_password_sql);
-
-                echo '<script>';
-                echo 'document.addEventListener("DOMContentLoaded", function() {';
-                echo '  Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            title: "Profile updated successfully!",
-                            showConfirmButton: false,
-                            timer: 1500,
-                            customClass: "swal"
-                        }).then(function() {
-                            window.location.href = "link4.php";
-                        });';
-                echo '});';
-                echo '</script>';
-            } else {
-                echo '<script>';
-                echo 'document.addEventListener("DOMContentLoaded", function() {';
-                echo '  Swal.fire({
-                            position: "top-end",
-                            icon: "error",
-                            title: "Error",
-                            text: "Old password is incorrect.",
-                            showConfirmButton: false,
-                            timer: 1500,
-                            customClass: "swal"
-                        });';
-                echo '});';
-                echo '</script>';
-            }
-        } else {
-            echo '<script>';
-            echo 'document.addEventListener("DOMContentLoaded", function() {';
-            echo '  Swal.fire({
-                        icon: "error",
-                        title: "Error",
-                        text: "Error retrieving user information.",
-                        showConfirmButton: false,
-                        timer: 1500,
-                        confirmButtonColor: "#141E46",
-                        customClass: "swal"
-                    });';
-            echo '});';
-            echo '</script>';
-        }
-    } else {
-        echo '<script>';
-        echo 'document.addEventListener("DOMContentLoaded", function() {';
-        echo '  Swal.fire({
-                    position: "top-end",
-                    icon: "error",
-                    title: "Error",
-                    text: "New passwords is not match.",
-                    showConfirmButton: false,
-                    timer: 1500,
-                    customClass: "swal"
-                });';
-        echo '});';
-        echo '</script>';
-    }
-    
-    if(isset($_FILES['avatar']) && $_FILES['avatar']['error'] == UPLOAD_ERR_OK) {
-        $avatar_tmp_name = $_FILES['avatar']['tmp_name'];
-        $avatar_extension = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
-        $avatar_name = $user_id . '.' . $avatar_extension;
-        $avatar_path = "../uploads/avatar/" . $avatar_name;
-
-        $_SESSION['user_data'] = array(
-            'emp_no' => $user_id,
-            'name' => $user_name,
-            'email' => $user_email,
-            'status' => $user_status,
-            'avatar' => $avatar_path
-        );
-        
-        if(move_uploaded_file($avatar_tmp_name, $avatar_path)) {
-            $update_avatar_sql = "UPDATE users SET avatar='$avatar_path' WHERE emp_no='$user_id'";
-            mysqli_query($conn, $update_avatar_sql);
-            echo '<script>';
-            echo 'document.addEventListener("DOMContentLoaded", function() {';
-            echo '  Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "Profile updated successfully!",
-                        showConfirmButton: false,
-                        timer: 1500,
-                        customClass: "swal"
-                    }).then(function() {
-                        window.location.href = "link4.php";
-                    });';
-            echo '});';
-            echo '</script>';
-        } else {
-            echo '<script>';
-            echo 'document.addEventListener("DOMContentLoaded", function() {';
-            echo '  Swal.fire({
-                        icon: "error",
-                        title: "Error",
-                        text: "Failed to move uploaded file.",
-                        confirmButtonColor: "#141E46"
-                    });';
-            echo '});';
-            echo '</script>';
-        }
-    }
-}
+  }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>AMAPS - Settings</title>
-    <meta name="description" content="The small framework with powerful features">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" href="/favicon.ico">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-  <!-- Font Awesome Icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-<style>
-        body{
-            background-color: #F1f1f1;
-            color: #141E46;
-            font-family: 'Poppins', sans-serif;
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 1.7;
-            letter-spacing: 0.025em;
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overflow: hidden;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            z-index: 100;
-            width: 210px; /* Sidebar width */
-            padding: 50px 0 0; /* Adjust padding based on your needs */
-            background-color: #141E46; /* Sidebar background color */
-            transition: all 0.5s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            color: #f1f1f1;
-        }
-        .sidebar.collapsed {
-            width: 80px; /* Collapsed sidebar width */
-            overflow-x: hidden;
-            transition: all 0.5s ease;
-        }
-        .list-group-item i {
-            position: relative;
-            margin-right: 10px; /* Space between icon and text */
-        }
-        .list-group-item .text {
-            transition: all 0.5s ease;
-        }
-        .list-group-item.collapsed .text {
-            display: none;
-            transition: all 0.5s ease;
-        }
-        .main-content {
-            margin-left: 200px; /* Adjust according to sidebar width */
-            padding: 20px; /* Adjust padding based on your needs */
-            transition: all 0.5s ease;
-            overflow: hidden;
-        }
-        .main-content.collapsed {
-            margin-left: 80px; /* Adjust margin for collapsed sidebar */
-        }
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            transition: all 0.5s ease;
-        }
-        .sidebar-header.collapsed {
-            text-align: center;
-            padding: 15px 0;
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .sidebar-header.collapsed p {
-            display: none;
-            transition: all 0.5s ease;
-        }
-        .avatar.collapsed {
-            transform: scale(0.5);
 
-        }
-        .toggle-btn {
-            margin-right: 10px;
-            background-color: #141E46;
-        }
-        .toggle-btn:hover {
-            background-color: #141E46;
-            color: #FF6969;
-        }
-        .list-group{
-            position: absolute;
-            top: 55%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-        }
-        .list-group-item {
-            position: relative;
-            padding: 10px 24px;
-            border: none;
-            background-color: #141E46;
-            color: #FFF5E0;
-        }
-        .list-group-item:hover {
-            color: #FF6969;
-            background-color: #141E46;
-        }
-        .activated{
-            color: #FF6969;
-        }
-        .navbar{
-            background-color: #f1f1f1;
-        }
-        
-        button {
-        padding: 10px 40px;
-        border-radius: 50px;
-        cursor: pointer;
-        border: 0;
-        background-color: #C70039;
-        box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
-        text-transform: uppercase;
-        font-size: 15px;
-        transition: all 0.5s ease;
-        color: white;
-        }
-        button:hover {
-        letter-spacing: 5px;
-        background-color: #C70039;
-        color: hsl(0, 0%, 100%);
-        box-shadow: #C70039 0px 7px 29px 0px;
-        }
-        button:active {
-        letter-spacing: 1px;
-        background-color: #141E46;
-        color: hsl(0, 0%, 100%);
-        box-shadow: #141E46 0px 0px 0px 0px;
-        transform: translateY(10px);
-        transition: 100ms;
-        }
-  </style>
+<head>
+    <meta charset="utf-8">
+    <title>DASHMIN - Bootstrap Admin Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+
 <body>
-<div class="container-fluid">
-        <div class="row">
-        <div class="col-auto sidebar" id="sidebar">
-                <div class="sidebar-header">
-                    <center>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>Silver Lining</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
                         <?php
-                        if(isset($avatar)){
-                            echo '<img src="'. $avatar .'" alt="User Avatar" class="avatar mb-2">';
+                        if(isset($user_data['avatar'])){
+                            echo '<img class="rounded-circle" src="'.$avatar.'" alt="" style="width: 40px; height: 40px;">';
                         } else {
                             echo '<img src="../assets/temp_avatar.jpg" alt="User Avatar" class="avatar mb-2">';
                         }
                         ?>
                         
-                        <p><?php echo $user_id; ?></p>
-                    </center>
-                </div>
-                <div class="list-group">
-                    <a href="../administrator/index.php" class="d-flex align-items-center list-group-item list-group-item-action">
-                        &nbsp<i class="fa-solid fa-clock mr-3"></i><span class="text">Timekeeping</span>
-                    </a>
-                    <a href="../administrator/employees.php" class="d-flex align-items-center list-group-item list-group-item-action">
-                        &nbsp<i class="fa-solid fa-users mr-3"></i><span class="text">Employees</span>
-                    </a>
-                    <a href="../administrator/payroll.php" class="d-flex align-items-center list-group-item list-group-item-action">
-                        &nbsp<i class="fa-solid fa-money-check-dollar mr-3"></i><span class="text">Payroll</span>
-                    </a>
-                    <a href="../administrator/attendance.php" class="d-flex align-items-center list-group-item list-group-item-action">
-                        &nbsp<i class="fa-solid fa-user mr-3"></i><span class="text">Attendances</span>
-                    </a>
-                    <a href="../administrator/settings.php" class="d-flex align-items-center list-group-item list-group-item-action  activated">
-                        &nbsp<i class="fa-solid fa-gear mr-3"></i><span class="text">Settings</span>
-                    </a><br><br><br>
-                    <a href="../administrator/functions/logout.php" class="d-flex align-items-center list-group-item list-group-item-action bg-danger">
-                        &nbsp<i class="fa-solid fa-power-off"></i><span class="text">Logout</span>
-                    </a>
-                </div>
-                
-            </div>
-
-            <!-- Main Content -->
-            <div class="col main-content" id="main-content">
-                <nav class="navbar">
-                    <div class="container-fluid header-bar">
-                        <button class="btn btn-secondary toggle-btn" id="sidebar-toggle">
-                            <i class="fas fa-bars"></i>
-                        </button>
-                        <h1 class="navbar-brand">Edit Profile</h1>
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
-                </nav>
+                    <div class="ms-3">
+                        <h6 class="mb-0"><?php echo $user_name; ?></h6>
+                        <span><?php echo $user_id; ?></span>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="index.php" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Timekeeping</a>
+                    <a href="employees.php" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Employees</a>
+                    <a href="payroll.php" class="nav-item nav-link"><i class="fa fa-file-alt me-2"></i>Payroll</a>
+                    <a href="attendance.php" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Attendances</a>
+                    <a href="settings.php" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>My Profile</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
 
-                <main>
-                    <?php
-                    $sql = "SELECT * FROM users";
-                    $result = mysqli_query($conn, $sql);
-                    $row = mysqli_fetch_array($result);
-                    ?>
-                    <center>
-                        <div class="container w-75 h-50 profile" style="padding: 10px;">
-                            <div class="row" >
-                                <div class="left col">
-                                    <?php
-                                        if(isset($user_data['avatar'])){
-                                            echo '<img class="avatar avatar-preview" src="'. $avatar .'" alt="Avatar" style="width: 350px; height: 350px; border: 1px solid #141E46; border-radius: 25px;">';
-                                        } else {
-                                            echo '<img class="avatar avatar-preview" src="../assets/temp_avatar.png" alt="Avatar" style="width: 350px; height: 350px; border: 1px solid #141E46; border-radius: 25px;">';
-                                        }
-                                    ?>
-                                </div>
-                                <div class="right col">
-                                    <div class="form">
-                                        <form action="settings.php" method="post" class="text-start" enctype="multipart/form-data">
-                                            <label for="" class="form-label">Employee ID</label>
-                                            <input type="text" class="form-control" name="emp_no" value="<?php echo $row['emp_no']?>">
-                                            <label for="" class="form-label">Name</label>
-                                            <input type="text" class="form-control" name="name" value="<?php echo $row['name']?>">
-                                            <label for="" class="form-label">Email</label>
-                                            <input type="text" class="form-control" name="email" value="<?php echo $row['email']?>">
-                                            <label for="" class="form-label">Old Password</label>
-                                            <input type="password" name="old_password" class="form-control">
-                                            <label for="" class="form-label">New Password</label>
-                                            <input type="password" name="new_password" class="form-control">
-                                            <label for="" class="form-label">Confirm Password</label>
-                                            <input type="password" name="confirm_password" class="form-control">
-                                            <label for="" class="form-label">Avatar</label>
-                                            <input type="file" name="avatar" accept="image/*" class="form-control">
-                                            <center>
-                                            <button type="submit" class=" mt-3" name="save_profile">Save Profile</button>
-                                            </center>
-                                        </form>
-                                    </div>
-                                </div>
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <?php
+                        if(isset($user_data['avatar'])){
+                            echo '<img class="rounded-circle" src="'.$avatar.'" alt="" style="width: 40px; height: 40px;">';
+                        } else {
+                            echo '<img src="../assets/temp_avatar.jpg" alt="User Avatar" class="avatar mb-2">';
+                        }
+                        ?>
+                            <span class="d-none d-lg-inline-flex"><?php echo $user_name; ?></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="functions/logout.php" class="dropdown-item text-danger">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+            
+                    <div class="row mb-3 p-4">
+                        <div class="col-12">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Responsive Table</h6>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">First Name</th>
+                                            <th scope="col">Last Name</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Country</th>
+                                            <th scope="col">ZIP</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>John</td>
+                                            <td>Doe</td>
+                                            <td>jhon@email.com</td>
+                                            <td>USA</td>
+                                            <td>123</td>
+                                            <td>Member</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">2</th>
+                                            <td>Mark</td>
+                                            <td>Otto</td>
+                                            <td>mark@email.com</td>
+                                            <td>UK</td>
+                                            <td>456</td>
+                                            <td>Member</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+                                            <td>Jacob</td>
+                                            <td>Thornton</td>
+                                            <td>jacob@email.com</td>
+                                            <td>AU</td>
+                                            <td>789</td>
+                                            <td>Member</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    </center>
-                </main>
-            </div>
+                    </div>
+                        </div>
             
+                    <div class="row p-4">
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">PAYROLL</h6>
+                            <form>
+                                <div class="mb-3 row">
+                                    <div class="col-6 col-ms-12 col-md-6 col-lg-6">
+                                        <label for="date_from" class="form-label">Date From:</label>
+                                        <input type="date" class="form-control" id="date_from">
+                                    </div>
+                                    <div class="col-6 col-ms-12 col-md-6 col-lg-6">
+                                        <label for="date_to" class="form-label">Date To:</label>
+                                        <input type="date" class="form-control" id="date_to">
+                                    </div>
+                                </div>
+                                <div class="row d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-primary col-6">View Payroll</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">ATTENDANCE</h6>
+                            <form>
+                                <div class="mb-3 row">
+                                    <div class="col-6 col-ms-12 col-md-6 col-lg-6">
+                                        <label for="date_from" class="form-label">Date From:</label>
+                                        <input type="date" class="form-control" id="date_from">
+                                    </div>
+                                    <div class="col-6 col-ms-12 col-md-6 col-lg-6">
+                                        <label for="date_to" class="form-label">Date To:</label>
+                                        <input type="date" class="form-control" id="date_to">
+                                    </div>
+                                </div>
+                                <div class="row d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-primary col-6">View Attendance</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                    
+
+            <video id="cameraPreview" autoplay style="display: none;"></video>
+            <canvas id="photoCanvas" style="display: none;"></canvas>
+
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            <span>2024 </span>&copy; <a href="#">Michelle Silver Lining Mental Health Counseling</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer End -->
         </div>
+        <!-- Content End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
 
-<!-- Bootstrap Bundle with Popper -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
-<!-- Font Awesome Icons -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelector('input[type=file]').addEventListener('change', function() {
-            var file = this.files[0];
-            if(file) {
-                var reader = new FileReader();
-                reader.onload = function(event) {
-                    document.querySelector('.avatar-preview').setAttribute('src', event.target.result);
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    });
-    document.getElementById('sidebar-toggle').addEventListener('click', function() {
-        document.getElementById('sidebar').classList.toggle('collapsed');
-        document.getElementById('main-content').classList.toggle('collapsed');
-        document.querySelector('.avatar').classList.toggle('collapsed');
-        document.querySelector('.sidebar-header').classList.toggle('collapsed');
-        
-        // Toggle visibility of text in list items
-        var listItems = document.querySelectorAll('.list-group-item');
-        listItems.forEach(function(item) {
-            item.classList.toggle('collapsed');
-        });
-    });
-    </script>
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../lib/chart/chart.min.js"></script>
+    <script src="../lib/easing/easing.min.js"></script>
+    <script src="../lib/waypoints/waypoints.min.js"></script>
+    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="../lib/tempusdominus/js/moment.min.js"></script>
+    <script src="../lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="../js/main.js"></script>
+    
 </body>
+
 </html>

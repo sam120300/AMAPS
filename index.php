@@ -35,29 +35,39 @@ if(isset($_POST['login'])){
                 );
                 $_SESSION['user'] = 1;
 
-                if ($row['status'] == "Inactive") {
+                if ($row['status'] == 0) {
                     echo '<script>';
                     echo 'document.addEventListener("DOMContentLoaded", function() {';
-                    echo '  Swal.fire({
-                                position: "top-end",
-                                icon: "error",
-                                title: "Your account is not active.",
-                                showConfirmButton: false,
-                                timer: 1500,
-                                customClass: "swal"
+                    echo '  const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true
+                            });
+                            Toast.fire({
+                            icon: "error",
+                            title: "Your account is not yet Active"
                             })';
                     echo '});';
                     echo '</script>';
                 } else {
                     echo '<script>';
                     echo 'document.addEventListener("DOMContentLoaded", function() {';
-                    echo '  Swal.fire({
-                                position: "center",
-                                icon: "success",
-                                title: "Login Successfully",
-                                showConfirmButton: false,
-                                timer: 1500,
-                                customClass: "swal"
+                    echo '  const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                            });
+                            Toast.fire({
+                            icon: "success",
+                            title: "Signed in successfully"
                             }).then(function() {
                                 window.location = "./administrator/index.php";
                             });';
@@ -71,28 +81,34 @@ if(isset($_POST['login'])){
         } else {
             echo '<script>';
             echo 'document.addEventListener("DOMContentLoaded", function() {';
-            echo '  Swal.fire({
-                        position: "top-end",
-                        icon: "error",
-                        title: "Incorrect Password",
-                        showConfirmButton: false,
-                        timer: 1500,
-                        customClass: "swal"
-                    })';
+            echo '  const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true
+                            });
+                            Toast.fire({
+                            icon: "error",
+                            title: "Incorrect ID or Password"
+                            })';
             echo '});';
             echo '</script>';
         }
     } else {
         echo '<script>';
         echo 'document.addEventListener("DOMContentLoaded", function() {';
-        echo '  Swal.fire({
-                    position: "top-end",
-                    icon: "error",
-                    title: "Incorrect Password",
-                    showConfirmButton: false,
-                    timer: 1500,
-                    customClass: "swal"
-                });';
+        echo '  const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true
+                            });
+                            Toast.fire({
+                            icon: "error",
+                            title: "Incorrect ID or Password"
+                            });';
         echo '});';
         echo '</script>';
     }
@@ -105,7 +121,8 @@ if(isset($_POST['login'])){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ASTRA</title>
+    <title>Michelle Silver Lining Mental Health Counseling
+    </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
     <meta name="description" content="The small framework with powerful features">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,15 +139,17 @@ if(isset($_POST['login'])){
         background-repeat: no-repeat;
         background-color: #495057;
         height: 100%;
+        background-attachment: fixed;
+        
     }
     .container{
         position: absolute;
-        top: 45%;
-        left: 30%;
+        top: 50%;
+        left: 50%;
         transform: translate(-50%, -50%);
         width: 400px;
         height: 400px;
-        background-color: white;
+        background-color: rgba(255, 255, 255, 0.5);
         border-radius: 10px;
         padding: 5px;
         box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
@@ -211,11 +230,147 @@ if(isset($_POST['login'])){
         transform: translate(-50%, -50%);
         width: 90%;
         font-size: 14px;
-        text-align: center
+        text-align: center;
+        color: #1864ab;
     }
+    /* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .container{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 400px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 10px;
+        padding: 5px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h2.title {
+        font-size: 20px;
+    }
+
+    button {
+        padding: 8px 30px;
+    }
+
+    footer p {
+        font-size: 10px;
+        color: #1864ab;
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .container{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 400px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 10px;
+        padding: 5px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h2.title {
+        font-size: 22px;
+    }
+
+    button {
+        padding: 10px 40px;
+    }
+
+    footer p {
+        font-size: 12px;
+        color: #1864ab;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .container{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 400px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 10px;
+        padding: 5px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h2.title {
+        font-size: 24px;
+    }
+
+    footer p {
+        font-size: 12px;
+        color: #1864ab;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .container{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        height: 400px;
+        background-color: rgba(255, 255, 255, 0.0);
+        border-radius: 10px;
+        padding: 5px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        color: white;
+    }
+
+    h2.title {
+        font-size: 24px;
+    }
+
+    footer p {
+        font-size: 14px;
+        color: #1864ab;
+    }
+}
+.video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        /* Fullscreen video, responsive and centered */
+        video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+        }
+
 </style>
 <body>
-    <div id="particles-js"></div>
+    <div class="video-container">
+        <video autoplay muted loop>
+            <source src="assets/bg.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>  
     
     <div class="container">
         <div class="form-container">
@@ -237,7 +392,7 @@ if(isset($_POST['login'])){
     <footer>
         <fieldset class="text-light footer">
             <legend align="center">
-                <h1>Highly Confidential</h1>
+                <h1 style="color: #1864ab;">Highly Confidential</h1>
             </legend>
             <p>This website facility is for the use of authorized users only. All users of this website are subject to having all of their activities monitored and recorded. Any nefarious activity will be subject to legal action. Anyone using this system expressly consents to such monitoring and is advised that if such monitoring reveals possible evidence of criminal activity system personnel may provide the evidence of such monitoring to law enforcement officials.</p>
         </fieldset>

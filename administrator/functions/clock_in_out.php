@@ -1,8 +1,8 @@
 <?php
-
+date_default_timezone_set('Asia/Manila');
 // Database configuration
 $host = 'localhost';
-$db = 'astra_db';
+$db = 'amaps_db';
 $user = 'root';
 $pass = '';
 $charset = 'utf8mb4';
@@ -28,11 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'clock_in') {
         // Insert new record for clock in
-        $sql = "INSERT INTO attendance (emp_no, time_in, date) VALUES (:emp_no, :time_in, :date)";
+        $sql = "INSERT INTO timesheet (emp_no, time_in, attend_date) VALUES (:emp_no, :time_in, :date)";
         $params = ['emp_no' => $emp_no, 'time_in' => $current_time, 'date' => $current_date];
     } elseif ($action === 'clock_out') {
         // Update existing record for clock out for the same date
-        $sql = "UPDATE attendance SET time_out = :time_out WHERE emp_no = :emp_no AND date = :date AND time_out IS NULL ORDER BY id DESC LIMIT 1";
+        $sql = "UPDATE timesheet SET time_out = :time_out WHERE emp_no = :emp_no AND attend_date = :date AND time_out IS NULL ORDER BY id DESC LIMIT 1";
         $params = ['time_out' => $current_time, 'emp_no' => $emp_no, 'date' => $current_date];
     }
 
