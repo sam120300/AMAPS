@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 15, 2024 at 05:46 PM
+-- Generation Time: Sep 19, 2024 at 05:19 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.7
 
@@ -60,7 +60,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `emp_no`, `password`, `name`, `email`, `position`, `rate`, `shift`, `avatar`, `status`, `created_at`) VALUES
-(1, '2400062', 'samonte', 'Christian Samonte', 'christian.samonte@nidec.com', 'Agent', '5', 'night', '../uploads/avatar/2400062.jpg', '0', '2024-09-10 20:48:42');
+(1, '2400062', 'samonte', 'Christian Samonte', 'christian.samonte@nidec.com', 'Agent', '5', 'night', '../uploads/avatar/2400062.jpg', '1', '2024-09-10 20:48:42');
 
 --
 -- Indexes for dumped tables
@@ -86,7 +86,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `timesheet`
 --
 ALTER TABLE `timesheet`
-  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
